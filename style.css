@@ -548,9 +548,10 @@ h3{
 }
 
 p{
+	text-align: left;
 	color: #5bacbd;
-	padding-left: 2.5%;
-	padding-right: 2.5%;
+	padding-left: 10%;
+	padding-right: 10%;
 }
 ul {
 	position: absolute;

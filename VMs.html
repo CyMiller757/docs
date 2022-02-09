@@ -16,24 +16,42 @@
 <h2>Setting Up Virtual Machines</h2>
 
 <h3>Downloading ISOs</h3>
-<p>	These tutorials will also be using Ubuntu Server ISOs. Like with the hypervisors, other distros can be used, but adapting these instructions for other distros is up to you. You can get the Ubuntu Server 20.04 ISO <a href="https://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso?_ga=2.186482025.1974767969.1643923528-1397333546.1643923528">here</a>. Another popular server distro is Fedora. You can get Fedora 35 <a href="https://download.fedoraproject.org/pub/fedora/linux/releases/35/Server/x86_64/iso/Fedora-Server-dvd-x86_64-35-1.2.iso">here</a>. It is recommended to keep your ISOs is their own folder wherever you want them. I keep mine on the desktop for quick access.</p>
+<p>	These tutorials will also be using Ubuntu Server ISOs. Like with the hypervisors, other distros can be used, but adapting these instructions for other distros is up to you. You can get the Ubuntu Server 20.04 ISO <a href="https://releases.ubuntu.com/20.04.3/ubuntu-20.04.3-live-server-amd64.iso?_ga=2.186482025.1974767969.1643923528-1397333546.1643923528">here</a>. Another popular server distro is Fedora. You can get Fedora 35 <a href="https://download.fedoraproject.org/pub/fedora/linux/releases/35/Server/x86_64/iso/Fedora-Server-dvd-x86_64-35-1.2.iso">here</a>. It is recommended to keep your ISOs in their own folder wherever you want them. I keep mine on the desktop for quick access.</p>
 
 <h3>Installing VirtualBox</h3>
 <p>	The proceeding tutorials will be using VirtualBox. Instructions will assume you are within that environment. The core of the instructions will work on other hypervizors or even on bare metal, but there may be differences in how it is set up. You can find the installer for VirtualBox <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">here</a>.</p>
 
 <h3>Configuring VirtualBox</h3>
-<p>Upon installation of VirtualBox, some settings will need to be changed to work in the environment we set up. They will be shown in the following screenshots.</p>
-
-<p>Here is more sample text meant to caption the bellow terminal example. This is to be multiple lines if neccissary. I want to test how long this will become before it wraps to a new line.</p>
-<pre class="command-line" data-user="root" data-host="localhost" data-output="2-4">
-<code class="language-bash">ls
-d-r--        10/14/2015   5:06 PM            Downloads
-d-r--        10/14/2015   5:06 PM            Favorites
-d-r--        10/14/2015   5:06 PM            Links
-cd
-ps aux</code>
+<p>Below is a great video about virtual machines and how to get started with Virtual Box.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/wX75Z-4MEoM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<p>Upon installation of VirtualBox, we are going to set up our template machine.</p>
+<p>You will want to create a new virtual machine that we will use as a template machine. Create a new virtual machine, and on the distro of your chioce, go though the installer while only installing the minimum neccessary packages. Once a virtual machine is set up, we are going to start cloning and adapting it for other uses.</p>
+<p>On the template base machine, you will want to edit the <span class="altColor">/etc/cloud/cloud.cfg</span> file and ensure that it has <span class="altColor">preserve_hostname: true</span> instead of false. It should be on line 15. This step can be done on cloned machines, but to save future time, it is better to do so on this one.</p> 
+<pre class="command-line" data-user="user" data-host="clonebase">
+<code class="language-bash">sudo nano /etc/cloud/cloud.cfg</code>
 </pre>
-</p>
+<img src="images/VMs-cloud.cfg.png">
+
+<h3>Cloning Virtual Machines</h3>
+<p>Now that we have our base template created, we are going to clone it for other uses. Simply right click on the base virtual machine and click <span class="altColor">Clone</span>. Name the clone and set the path as desired. Ensure that the <span class="altColor">MAC Address Policy:</span> is set to <span class="altColor">Generate new MAC address...</span> as shown below.</p>
+<img src="images/VMs-cloneing.png">
+<p>Lastly, ensure that <span class="altColor">Clone Type</span> is set to <span class="altColor">Full Clone</span>. After that, you should have another virtual machine shown in Virtual Box Manger.</p>
+
+<h3>Configuring the New Virtual Machine</h3>
+<p>First, you will want to change the hostname. One possible way is to enter the following command, and replace the text of the current hostname to the desired one.</p>
+<pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo nano /etc/hostname</code></pre>
+<p>Next, you may want to change the password. You can do so with the command bellow.</p>
+<pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo passwd</code></pre>
+<p>It may also be neccessary to generate new SSH keys. This can be done with the following command.</p>
+<pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo rm /etc/ssh/ssh_host_* && sudo dpkg-reconfigure openssh-server</code></pre>
+<p>Lastly, you should reboot and ensure that the hostname has indeed been changed.</p>
+<pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">reboot</code></pre>
+<div class="bottomSpacer"</div>
+
 
 
 <script src="prism.js"></script>

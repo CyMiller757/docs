@@ -46,26 +46,61 @@
 </pre>
 
 <h3>Firewall.sh Script</h3>
-
-
-
-
-
-
-<h3>	This is an example paragraph meant to be considered an introduction</h3>
-
-
-<p>
-Here is more sample text meant to caption the bellow terminal example. This is to be multiple lines if neccissary. I want to test how long this will become before it wraps to a new line.
-<pre class="command-line" data-user="user" data-host="router" data-output="2-4">
-<code class="language-bash">ls
-d-r--        10/14/2015   5:06 PM            Downloads
-d-r--        10/14/2015   5:06 PM            Favorites
-d-r--        10/14/2015   5:06 PM            Links
-cd
-ps aux</code>
+<p>Next we are going to install the firewall.sh script. I will be showing how to get the file so using the wget command. I will also include a command that uses git. As a last resort, you could copy the written out file that will be down bellow.</p>
+<h4>Download using wget:</h4>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">wget https://docs.cymiller.tech/firewall.sh</code>
 </pre>
-</p>
+<h4>Download using git:</h4>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">git clone https://github.com/CyMiller757/firewallsh</code>
+</pre>
+<h4>The script itself:</h4>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">#!/bin/bash
+
+WAN_DEVICE=enp0s3
+LAN_DEVICE=enp0s8
+
+IPTABLES=/sbin/iptables
+
+$IPTABLES -F
+#echo 1
+$IPTABLES -t nat -A POSTROUTING -o $WAN_DEVICE -j MASQUERADE
+#echo 2
+$IPTABLES -A FORWARD -i $WAN_DEVICE -o $LAN_DEVICE -m state --state NEW -j REJE$
+#echo 3
+$IPTABLES -A FORWARD -i $WAN_DEVICE -o $LAN_DEVICE -m state --state RELATED,EST$
+#echo 4
+$IPTABLES -A FORWARD -i $LAN_DEVICE -o $WAN_DEVICE -j ACCEPT</code>
+</pre>
+
+<p>Now we will have to make the file executable. You can also move it if desired.</p>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo chmod +x /path/to/firewall.sh</code>
+</pre>
+
+
+<h3>rc.local</h3>
+<p>We are either going to create or change the rc.local file. If there is pre-existing code within the file, add the path to firewall.sh somewhere within</p>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo nano /etc/rc.local</code>
+</pre>
+<h4>Full Script</h4>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">#!/bin/bash
+
+/path/to/firewall.sh
+
+exit 0</code>
+</pre>
+<p>Lastly, ensure rc.local is executable</p>
+<pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo chmod +x /etc/rc.local</code>
+</pre>
+
+
+
 
 
 <script src="prism.js"></script>

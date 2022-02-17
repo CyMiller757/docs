@@ -594,6 +594,9 @@ li a:hover:not(.active) {
 .bottomSpacer{
 	margin: 50px;
 }
+a{
+	color: #c97064;
+}
 
 @media screen and (max-width: 1400px) {
 	ul {

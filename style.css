@@ -591,6 +591,9 @@ li a:hover:not(.active) {
 .altColor{
 	color: #c97064;
 }
+.altColor1{
+	color: #00FF00;
+}
 .bottomSpacer{
 	margin: 50px;
 }

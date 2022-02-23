@@ -12,20 +12,21 @@
   <li><a href="VMs.html">VirtualBox</a></li>
   <li><a href="Router.html">Router</a></li>
   <li><a class="active" href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
 </ul>
 
 <h2>Setting up a DHCP server</h2>
 <h3>Installing isc-dhcp-server</h3>
 <p>To start, you will want to install the <span class="altColor">isc-dhcp-server package</span>.</p>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">sudo apt install isc-dhcp-server</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">sudo apt install isc-dhcp-server</code></pre></div>
 
 <h3>Setting up netplan</h3>
 <p>Bellow is the netplan configuration that I used. For the most part, it can be copy and pasted. Just remember that the IP addresses may need to be changed based on your set up.</p>
-<pre class="command-line" data-user="root" data-host="localhost" data-output="2-4">
-<code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp" data-output="2-4">
+<code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml</code></pre></div>
 <h4>Note: YAML is very picky about spacing</h4>
-<pre class="command-line" data-user="user" data-host="dhcp" data-output="1-10">
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp" data-output="1-10">
 <code class="language-bash">network:
      ethernets:
           enp0s3:
@@ -35,31 +36,31 @@
                nameservers:
                     addresses: [1.1.1.1]
                optional: true
-          version: 2</code></pre>
+          version: 2</code></pre></div>
 
-<pre class="command-line" data-user="root" data-host="localhost" data-output="2-4">
-<code class="language-bash">sudo netplan apply</code></pre>
+<div class="codes"><pre class="command-line" data-user="root" data-host="localhost" data-output="2-4">
+<code class="language-bash">sudo netplan apply</code></pre></div>
 
 
 <h3>Configuring the DHCP server</h3>
 <p>Next we will configure the <span class="altColor">/etc/dhcp/dhcpd.conf</span> file to work with our network, but we should first make a backup of the original file incase it is needed for some reason later on.</p>
 
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">sudo mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.old</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">sudo mv /etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf.old</code></pre></div>
 
 <p>There are multiple ways to get the dhcpd.conf file that I use. 
 <h4>wget:</h4>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">wget https://docs.cymiller.tech/dhcpd.conf</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">wget https://docs.cymiller.tech/dhcpd.conf</code></pre></div>
 
 <h4>git:</h4>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">git clone https://github.com/CyMiller757/dhcpdconf</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">git clone https://github.com/CyMiller757/dhcpdconf</code></pre></div>
 
 <h4>Manually:</h4>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">sudo nano /etc/dhcp/dhcpd.conf</code></pre>
-<pre class="command-line" data-user="user" data-host="dhcp" data-output="1-22">
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">sudo nano /etc/dhcp/dhcpd.conf</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp" data-output="1-22">
 <code class="language-bash">ddns-update-style none;
 option domain-name "localdomain";
 option domain-name-servers 10.69.69.2;
@@ -71,25 +72,25 @@ subnet 10.69.69.0 netmask 255.255.255.0 {
         range 10.69.69.100 10.69.69.199;
         option routers 10.69.69.1;
 }
-</code></pre>
+</code></pre></div>
 <p>Note that some variables may need to be adjusted to your needs such as <span class="altColor">option domain-name-servers</span>. This is the DNS server that can be found in the DNS tab at the top. Alternatively, you could use something like <span class="altColor">1.1.1.1</span>.
 
 <h3>Static Addresses</h3>
 <p>In the dhcpd.conf file, you may want to establish a static address for a specific machine. To do so, just add the following code to the end of the file adjusted. Replace information in brackets with what it refers to.</p>
-<pre class="command-line" data-user="user" data-host="dhcp" data-output="1-22">
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp" data-output="1-22">
 <code class="language-bash">host [name]{
 	hardware ethernet [mac address of other machine];
 	fixed-address [desired ip address];
-}</code></pre>
+}</code></pre></div>
 
 <h3>Final touches</h3>
 <p>To finish off, you will want to restart the <span class="altColor">isc-dhcp-server</span> service.</p>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">sudo systemctl restart isc-dhcp-server && sudo systemctl status isc-dhcp-server</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">sudo systemctl restart isc-dhcp-server && sudo systemctl status isc-dhcp-server</code></pre></div>
 <p>If the status outputs <span class="altColor1">active (running)</span> the dhcp server should be working. The best way to test is to connect a computer to the network and run the following command. If the output shows the IP address of the DHCP server we just created, then it is working.</p>
-<pre class="command-line" data-user="user" data-host="dhcp">
-<code class="language-bash">cat /var/lib/dhcp/dhclient.leases | grep dhcp-server</code></pre>
-<div class="bottomSpacer"</div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="dhcp">
+<code class="language-bash">cat /var/lib/dhcp/dhclient.leases | grep dhcp-server</code></pre></div>
+<div class="bottomSpacer"></div>
 
 
 

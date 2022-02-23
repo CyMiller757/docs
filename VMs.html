@@ -12,6 +12,7 @@
   <li><a class="active" href="VMs.html">VirtualBox</a></li>
   <li><a href="Router.html">Router</a></li>
   <li><a href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
 </ul>
 <h2>Setting Up Virtual Machines</h2>
 
@@ -27,9 +28,8 @@
 <p>Upon installation of VirtualBox, we are going to set up our template machine.</p>
 <p>You will want to create a new virtual machine that we will use as a template machine. Create a new virtual machine, and on the distro of your chioce, go though the installer while only installing the minimum neccessary packages. Once a virtual machine is set up, we are going to start cloning and adapting it for other uses.</p>
 <p>On the template base machine, you will want to edit the <span class="altColor">/etc/cloud/cloud.cfg</span> file and ensure that it has <span class="altColor">preserve_hostname: true</span> instead of false. It should be on line 15. This step can be done on cloned machines, but to save future time, it is better to do so on this one.</p> 
-<pre class="command-line" data-user="user" data-host="clonebase">
-<code class="language-bash">sudo nano /etc/cloud/cloud.cfg</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="clonebase">
+<code class="language-bash">sudo nano /etc/cloud/cloud.cfg</code></pre></div>
 <img src="images/VMs-cloud.cfg.png">
 
 <h3>Cloning Virtual Machines</h3>
@@ -39,18 +39,18 @@
 
 <h3>Configuring the New Virtual Machine</h3>
 <p>First, you will want to change the hostname. One possible way is to enter the following command, and replace the text of the current hostname to the desired one.</p>
-<pre class="command-line" data-user="user" data-host="newclone">
-<code class="language-bash">sudo nano /etc/hostname</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo nano /etc/hostname</code></pre></div>
 <p>Next, you may want to change the password. You can do so with the command bellow.</p>
-<pre class="command-line" data-user="user" data-host="newclone">
-<code class="language-bash">sudo passwd</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo passwd</code></pre></div>
 <p>It may also be neccessary to generate new SSH keys. This can be done with the following command.</p>
-<pre class="command-line" data-user="user" data-host="newclone">
-<code class="language-bash">sudo rm /etc/ssh/ssh_host_* && sudo dpkg-reconfigure openssh-server</code></pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">sudo rm /etc/ssh/ssh_host_* && sudo dpkg-reconfigure openssh-server</code></pre></div>
 <p>Lastly, you should reboot and ensure that the hostname has indeed been changed.</p>
-<pre class="command-line" data-user="user" data-host="newclone">
-<code class="language-bash">reboot</code></pre>
-<div class="bottomSpacer"</div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="newclone">
+<code class="language-bash">reboot</code></pre></div>
+<div class="bottomSpacer"></div>
 
 
 

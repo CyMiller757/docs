@@ -12,6 +12,7 @@
   <li><a href="VMs.html">VirtualBox</a></li>
   <li><a class="active" href="Router.html">Router</a></li>
   <li><a href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
 </ul>
 <h2>Creating a Router</h2>
 
@@ -22,11 +23,10 @@
 
 <h3>Configuring Netplan</h3>
 <p>To start, you need to edit the netplan config. It can be found in the <span class="altColor">/etc/netplan/</span> directory. For my machine, it was <span class="altColor">/etc/netplan/50-cloud-init.yaml</span>. YAML is very specific about formatting. White space is done with spaces and does not allow for tabs. For the config, you must determine which ethernet connection is for WAN and for LAN. If using Virtual Box, the name of the connection seems to be consistant. In my case <span class="altColor">enp0s3</span> is used for WAN and <span class="altColor">enp0s8</span> is for LAN.
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml</code></pre></div>
 <p>Bellow is what the config file should look like</p>
-<pre class="command-line" data-user="user" data-host="router" data-output="1-11">
+<div class="codes"><pre class="command-line" data-user="user" data-host="router" data-output="1-11">
 <code class="language-bash">network:
    ethernets:
       enp0s3:
@@ -37,26 +37,22 @@
          addresses: [10.69.69.1/24]
          dhcp4: no
          dhcp6: no
-   version: 2</code>
-</pre>
+   version: 2</code></pre></div>
 <p>I decided to go with the 10.69.69.0 network with the router at 10.69.69.1, but this can be adjusted as desired.</p>
 <p>To ensure the config is working, enter the following command. If there is no output, it should have been successful.</p>
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">sudo netplan apply</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo netplan apply</code></pre></div>
 
 <h3>Firewall.sh Script</h3>
 <p>Next we are going to install the firewall.sh script. I will be showing how to get the file so using the wget command. I will also include a command that uses git. As a last resort, you could copy the written out file that will be down bellow.</p>
 <h4>Download using wget:</h4>
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">wget https://docs.cymiller.tech/firewall.sh</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">wget https://docs.cymiller.tech/firewall.sh</code></pre></div>
 <h4>Download using git:</h4>
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">git clone https://github.com/CyMiller757/firewallsh</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">git clone https://github.com/CyMiller757/firewallsh</code></pre></div>
 <h4>The script itself:</h4>
-<pre class="command-line" data-user="user" data-host="router">
+<div class="codes"><pre class="command-line" data-user="user" data-host="router" data-output="1-1111">
 <code class="language-bash">#!/bin/bash
 
 WAN_DEVICE=enp0s3
@@ -77,29 +73,25 @@ $IPTABLES -A FORWARD -i $LAN_DEVICE -o $WAN_DEVICE -j ACCEPT</code>
 
 <p>Now we will have to make the file executable. You can also move it if desired.</p>
 <pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">sudo chmod +x /path/to/firewall.sh</code>
-</pre>
+<code class="language-bash">sudo chmod +x /path/to/firewall.sh</code></pre></div>
 
 
 <h3>rc.local</h3>
 <p>We are either going to create or change the rc.local file. If there is pre-existing code within the file, add the path to firewall.sh somewhere within</p>
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">sudo nano /etc/rc.local</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo nano /etc/rc.local</code></pre></div>
 <h4>Full Script</h4>
-<pre class="command-line" data-user="user" data-host="router">
+<div class="codes"><pre class="command-line" data-user="user" data-host="router" data-output="1-111">
 <code class="language-bash">#!/bin/bash
 
 /path/to/firewall.sh
 
-exit 0</code>
-</pre>
+exit 0</code></pre></div>
 <p>Lastly, ensure rc.local is executable</p>
-<pre class="command-line" data-user="user" data-host="router">
-<code class="language-bash">sudo chmod +x /etc/rc.local</code>
-</pre>
+<div class="codes"><pre class="command-line" data-user="user" data-host="router">
+<code class="language-bash">sudo chmod +x /etc/rc.local</code></pre></div>
 
-<div class="bottomSpacer"</div>
+<div class="bottomSpacer"></div>
 
 
 

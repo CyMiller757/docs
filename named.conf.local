@@ -1,0 +1,11 @@
+zone "cy.cts.test" {
+	type master;
+	notify no;
+	file "/etc/bind/db.cy.cts.test";
+};
+
+zone "69.69.10.in-addr.arpa" {
+	type master;
+	notify no;
+	file "/etc/bind/db.10.69.69";
+};

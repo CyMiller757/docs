@@ -111,7 +111,6 @@ code, pre {
 pre {
 	max-height: 30em;
 	overflow: auto;
-	margin-left: 2em;
 }
 
 mark {
@@ -569,7 +568,7 @@ ul {
 
 li {
 	float: left;
-	width: 25%;
+	width: 20%;
 }
 
 li a {
@@ -603,6 +602,13 @@ a{
 h4{
 	text-align: left;
 	margin-left: 3em;
+}
+.codes{
+	margin: auto;
+	width: 80%;
+}
+h4{
+	margin-left: 9%;
 }
 
 @media screen and (max-width: 1400px) {

@@ -1,0 +1,14 @@
+$TTL 3D		;
+$ORIGIN	69.69.10.in-addr.arpa.
+@		IN	SOA	ns.cy.cts.test. root.cy.cts.test. (
+				2022021601	;	serial number
+				1638		;	ns		refresh
+				204		;	ns		retry
+				10485		;	authority	expiry
+				256		);	min		(RFC2308)
+
+		IN	NS	ns.cy.cts.test.
+1		IN	PTR	gw.cy.cts.test.
+2		IN	PTR	ns.cy.cts.test.
+3		IN	PTR	dhcp.cy.cts.test.
+10		IN	PTR	fileserver.cy.cts.test.

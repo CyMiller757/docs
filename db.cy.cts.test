@@ -1,0 +1,14 @@
+$TTL	604800
+@	IN	SOA	ns.cy.cts.test. root.cy.cts.test. (
+		2022021601		; Serial
+		604800			; Refresh
+		86400			; Retry
+		2419200			; Expire
+		604800	)		; Negative Cache TTL
+;
+@		IN	NS		ns.cy.cts.test.
+@		IN	A		10.69.69.2
+gw		IN	A		10.69.69.1
+ns		IN	A		10.69.69.2
+dhcp		IN	A		10.69.69.254
+fileserver	IN	A		10.69.69.10

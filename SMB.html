@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Sample Page</title>
+	<link rel="stylesheet" href="prism.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="VMs.html">VirtualBox</a></li>
+  <li><a href="Router.html">Router</a></li>
+  <li><a href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
+  <li><a class="active" href="SMB.html">SAMBA</a></li>
+</ul>
+
+<h2>Setting up a Samba network share with a network PDF printer</h2>
+<h3>Creating Users and Groups</h3>
+<p>Before we set up the SMB service, we should establish the users and groups that are on the machine. You can estiblish the users and groups as you desire, but for example purposes, users will be <span class="altColor">"user[X]"</span> and groups will be <span class="altColor">"group[X]"</span> The Graph bellow shows how I set up my users and groups, and the following commands show examples of how to add users and groups.</p>
+<iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vRitkMFbHAo3yYYYMAn5E57W3JKJLutlOVT7TnQigyrzyQDoAr3lMnPoD4bcF5TQHKnRumjLodWK-jP/pubhtml?widget=true&amp;headers=false"></iframe>
+<h4>Add a new user:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo useradd -m user[X]</code></pre></div>
+<h4>Add a new group:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo groupadd group[X]</code></pre></div>
+<h4>Add user to groups:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo usermod [group],[otherGroup],...,[lastGroup] [user]</code></pre></div>
+
+
+<h3>Install Samba</h3>
+<p>In the following steps, we are going to install samba and ghostscripts. Then we are going to edit the config files to create a network share and a PDF print server.</p>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo apt install samba ghostscript</code></pre></div>
+<h4>Backup the default config file:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo mv /etc/samba/smb.conf /etc/samba/smb.conf.old</code></pre></div>
+<p>Now we download the files or create them ourselves</p>
+<h4>wget:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">wget https://docs.cymiller.tech/smb.conf && wget https://docs.cymiller.tech/print2pdf</code></pre></div>
+<h4>GitHub</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">git clone https://github.com/CyMiller757/samba</code></pre></div>
+<h4>Manually</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo nano /etc/samba/smb.conf</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba" data-output="1-9999">
+<code class="language-bash">[global]
+workgroup = CY
+netbios name = FILESERVER
+server string = Samba Server %v
+security = user
+map to guest = bad user
+dns proxy = no
+
+[homes]
+ comment = Home Directories
+ browseable = no
+ valid users = %S
+ writable = yes
+ create mask = 0700
+ directory mask = 0700
+
+[group1]
+ comment = Facilities department documents
+ path = /samba/shares/group1
+ valid users = @group1
+ force group = group1
+ create mask = 0660
+ directory mask = 0770
+ writable = yes
+
+[group2]
+ comment = Facilities department documents
+ path = /samba/shares/group2
+ valid users = @group2
+ force group = group2
+ create mask = 0660
+ directory mask = 0770
+ writable = yes
+
+[group3]
+ comment = Facilities department documents
+ path = /samba/shares/group3
+ valid users = @group3
+ force group = group3
+ create mask = 0660
+ directory mask = 0770
+ writable = yes
+
+[group4]
+ comment = Facilities department documents
+ path = /samba/shares/group4
+ valid users = @group4
+ force group = group4
+ create mask = 0660
+ directory mask = 0770
+ writable = yes
+
+[group5]
+ comment = Facilities department documents
+ path = /samba/shares/group5
+ valid users = @group5
+ force group = group5
+ create mask = 0660
+ directory mask = 0770
+ writable = yes
+
+
+
+[PDFprinter]
+        comment = Samba Virtual PDF Printer
+        printing = LPRNG
+        path = /var/spool/samba
+        printable = Yes
+        lpq command =
+        lprm command =
+        print command = /usr/local/bin/print2pdf /var/spool/samba/%s /home/%U
+</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo nano /usr/local/bin/print2pdf</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba" data-output="1-99">
+<code class="language-bash">#!/bin/bash
+
+bn=`date +%s`
+ps2pdf "$1" "$2"/print_$bn.pdf
+
+exit 0
+</code></pre></div>
+<p>The last part of this step is that we need to make <span class="altColor">print2pdf</span> executable</p>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo chmod +x path/to/print2pdf</code></pre></div>
+<h3>Final Steps</h3>
+<p>To finish off, we need to create the shared folders and set up the verification for users.</p>
+<h4>Setting Up Shared Folders</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo mkdir -p /samba/shares/[folder]</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo chown root.[group] samba/shares/[folder]</code></pre></div>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo chmod 770 /samba/shares/[folder]</code></pre></div>
+<h4>Establish Users</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba">
+<code class="language-bash">sudo smbpasswd -a [user]</code></pre></div>
+
+
+
+
+<h2>Sample Header</h2>
+
+<h3>	This is an example paragraph meant to be considered an introduction</h3>
+
+
+<p>
+Here is more sample text meant to caption the bellow terminal example. This is to be multiple lines if neccissary. I want to test how long this will become before it wraps to a new line.
+<div class="codes"><pre class="command-line" data-user="user" data-host="samba" data-output="2-4">
+<code class="language-bash">ls
+d-r--        10/14/2015   5:06 PM            Downloads
+d-r--        10/14/2015   5:06 PM            Favorites
+d-r--        10/14/2015   5:06 PM            Links
+cd
+ps aux</code></pre></div>
+</p>
+<div class="bottomSpacer"></div>
+
+<script src="prism.js"></script>
+</body>
+</html

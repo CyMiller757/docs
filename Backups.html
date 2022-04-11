@@ -1,0 +1,34 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Backups</title>
+	<link rel="stylesheet" href="prism.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a class="active" href="Backups.html">Backups</a></li>
+  <li><a href="VMs.html">VirtualBox</a></li>
+  <li><a href="Router.html">Router</a></li>
+  <li><a href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
+  <li><a href="SMB.html">SAMBA</a></li>
+  <li><a href="LAMP.html">LAMP</a></li>
+</ul>
+<h2>How and what to backup</h2>
+
+<h3>What will we be backing up?</h3>
+<p>Just about everything. We will be creating backups of the virtual machines along with a seperate backup of the config files. For Linode servers, we can create backups within the control panel (although it does cost more money).</p>
+
+<h3>How will we be backing it up?</h3>
+<p>Best practice is to follow the 3-2-1 rule where you have 3 copies of the data with 2 on site and 1 in the cloud. Due to the larger size of virtual machines compared to config files, the cloud back up will be the configs instead to reduce the potential cost of cloud storage. The virtual machines will be copied to a flash drive, external hard drive, or a file server if you have one of those. Best practice is to place the backups on the opposite side of the facility if possible. The cloud back ups will be utilizing GitHub. I like to organize the config files into repositories pertaining to the machine they are running on, but you could just have one large repository with all the files. The following pages will show how I organized my repositories.</p>
+
+
+
+<div class="bottomSpacer"></div>
+
+<script src="prism.js"></script>
+</body>
+</html

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>LAMP</title>
+	<link rel="stylesheet" href="prism.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<ul>
+  <li><a href="index.html">Home</a></li>
+  <li><a href="Backups.html">Backups</a></li>
+  <li><a href="VMs.html">VirtualBox</a></li>
+  <li><a href="Router.html">Router</a></li>
+  <li><a href="DHCP.html">DHCP</a></li>
+  <li><a href="DNS.html">DNS</a></li>
+  <li><a href="SMB.html">SAMBA</a></li>
+  <li><a class="active" href="LAMP.html">LAMP</a></li>
+</ul>
+<h2>How to set up a LAMP</h2>
+
+<h3>What is a Lamp?</h3>
+<p>LAMP is an acronym for Linux Apache MySQL PHP. It is essentially just a standard web-server.</p>
+
+<h3>How to set up a LAMP</h3>
+<p>The installation is extremely easy with the following command:</p>
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP">
+<code class="language-bash">sudo apt install apache2 libapache2-mod-php mysql-server mysql-client</code></pre></div>
+
+<p>To test it, we can create a file in /var/www/html called <span class="altColor">phpinfo.php</span> with the following code: </p>
+
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP" data-output="2-11111">
+<code class="language-bash">sudo nano /var/www/html/phpinfo.php</code></pre></div>
+<div class="codes"><pre class="php">
+<code class="language-bash">&lt;?php
+phpinfo();
+?&gt;</code></pre></div>
+
+<p>To test that it is working, go to <span class="altColor">[IP Address]/phpinfo.php</span> and you should see the following:</p>
+<iframe src="images/phpinfo.pdf" class="pdf"></iframe>
+
+<h3>How to configure apache</h3>
+<p>Due to the dynamic nature of the config file, step-by-step instructions are not entirely feasable. You can find the config file for my system below, but adjustments will need to be made for your application. Essentially, the domain name after <span class="altColor">"VirtualHost"</span> needs to be adjusted for your needs, and the path after <span class="altColor">DocumentRoot</span> needs to be set to where you have your website files located.</p>
+<iframe src="000-default.conf" class="apacheConf"></iframe>
+<h4>Note that the file is located at <span class="altColor">/etc/apache2/sites-enabled/000-default.conf</span>
+
+<p>Once changes are made, restart apache with the following command:</p>
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP">
+<code class="language-bash">sudo systemctl restart apache2</code></pre></div>
+
+<h3>Enabling SSL</h3>
+<p>SSL is used for secure connections. There are many ways to generate an SSL certificate, but we are going to use certbot to make it easier. To install and run certbot, run the following commands:</P>
+<h4>Install certbot</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP">
+<code class="language-bash">sudo snap install --classic certbot</code></pre></div>
+<h4>Run certbot and auto-configure apache:</h4>
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP">
+<code class="language-bash">sudo certbot --apache</code></pre></div>
+<p>Lastly, you may need to enable the port in your firewall. To do so, run the following command:</p>
+<div class="codes"><pre class="command-line" data-user="user" data-host="LAMP">
+<code class="language-bash">sudo ufw allow 443</code></pre></div>
+
+
+<div class="bottomSpacer"></div>
+
+<script src="prism.js"></script>
+</body>
+</html
